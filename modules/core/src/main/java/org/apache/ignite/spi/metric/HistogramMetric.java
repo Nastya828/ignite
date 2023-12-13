@@ -20,7 +20,7 @@ package org.apache.ignite.spi.metric;
 /**
  * Histogram metric calculates counts of measurements that gets into each bounds interval.
  * Note, that {@link #value()} will return array length of {@code bounds.length + 1}.
- * Last element will contains count of measurements bigger then most right value of bounds.
+ * Last element will contain count of measurements bigger than most right value of bounds.
  */
 public interface HistogramMetric extends ObjectMetric<long[]> {
     /** @return Bounds of this histogram. */

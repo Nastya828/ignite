@@ -71,6 +71,8 @@ import org.apache.ignite.internal.management.encryption.EncryptionCommand;
 import org.apache.ignite.internal.management.kill.KillCommand;
 import org.apache.ignite.internal.management.meta.MetaCommand;
 import org.apache.ignite.internal.management.metric.MetricCommand;
+import org.apache.ignite.internal.management.metric.MetricHistogramCommand;
+import org.apache.ignite.internal.management.metric.MetricHistogramResult;
 import org.apache.ignite.internal.management.performancestatistics.PerformanceStatisticsCommand;
 import org.apache.ignite.internal.management.property.PropertyCommand;
 import org.apache.ignite.internal.management.snapshot.SnapshotCommand;
@@ -1401,6 +1403,7 @@ public class CommandHandlerParsingTest {
             cmd == PropertyCommand.class ||
             cmd == SystemViewCommand.class ||
             cmd == MetricCommand.class ||
+            cmd == MetricHistogramCommand.class ||
             cmd == DefragmentationCommand.class ||
             cmd == PerformanceStatisticsCommand.class ||
             cmd == ConsistencyCommand.class ||

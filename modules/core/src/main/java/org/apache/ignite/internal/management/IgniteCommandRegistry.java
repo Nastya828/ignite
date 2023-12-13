@@ -30,6 +30,7 @@ import org.apache.ignite.internal.management.encryption.EncryptionCommand;
 import org.apache.ignite.internal.management.kill.KillCommand;
 import org.apache.ignite.internal.management.meta.MetaCommand;
 import org.apache.ignite.internal.management.metric.MetricCommand;
+import org.apache.ignite.internal.management.metric.MetricHistogramCommand;
 import org.apache.ignite.internal.management.performancestatistics.PerformanceStatisticsCommand;
 import org.apache.ignite.internal.management.persistence.PersistenceCommand;
 import org.apache.ignite.internal.management.property.PropertyCommand;
@@ -67,6 +68,7 @@ public class IgniteCommandRegistry extends CommandRegistryImpl<NoArg, Void> {
             new PropertyCommand(),
             new SystemViewCommand(),
             new MetricCommand(),
+            new MetricHistogramCommand(),
             new PersistenceCommand(),
             new DefragmentationCommand(),
             new PerformanceStatisticsCommand(),
