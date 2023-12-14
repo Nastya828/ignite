@@ -23,6 +23,7 @@ import java.util.Map;
 import org.apache.ignite.IgniteCheckedException;
 import org.apache.ignite.IgniteException;
 import org.apache.ignite.internal.processors.metric.GridMetricManager;
+import org.apache.ignite.internal.processors.metric.impl.HistogramMetricImpl;
 import org.apache.ignite.internal.processors.task.GridInternal;
 import org.apache.ignite.internal.processors.task.GridVisorManagementTask;
 import org.apache.ignite.internal.visor.VisorJob;
@@ -112,7 +113,10 @@ public class MetricTask extends VisorOneNodeTask<MetricCommandArg, Map<String, ?
                 Metric metric = mreg.findMetric(metricName);
 
                 if (metric != null)
-                    return Collections.singletonMap(name, valueOf(metric));
+                    if (metric instanceof HistogramMetricImpl)
+                        return ((HistogramMetricImpl)metric).getHistogramForPrint();
+                    else
+                        return Collections.singletonMap(name, valueOf(metric));
 
                 Object val = searchHistogram(metricName, mreg);
 

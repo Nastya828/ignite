@@ -18,6 +18,7 @@
 package org.apache.ignite.util;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -27,6 +28,7 @@ import org.apache.ignite.internal.management.metric.MetricCommand;
 import org.apache.ignite.internal.processors.metric.MetricRegistry;
 import org.apache.ignite.internal.processors.metric.impl.HistogramMetricImpl;
 import org.apache.ignite.internal.processors.metric.impl.HitRateMetric;
+import org.apache.ignite.internal.util.typedef.F;
 import org.apache.ignite.internal.util.typedef.internal.U;
 import org.junit.Test;
 
@@ -253,15 +255,21 @@ public class MetricCommandTest extends GridCommandHandlerClusterByClassAbstractT
         histogram.value(600);
         histogram.value(600);
 
+        int boundsWithLowAndName = bounds.length + 2;
+
         assertEquals("1", metric(ignite0, metricName(mregName, "histogram_0_50")));
         assertEquals("2", metric(ignite0, metricName(mregName, "histogram_50_500")));
         assertEquals("3", metric(ignite0, metricName(mregName, "histogram_500_inf")));
-        assertEquals("[1, 2, 3]", metric(ignite0, metricName(mregName, "histogram")));
+
+        assertEqualsCollectionsIgnoringOrder(F.asList("1", "2", "3", "[1, 2, 3]"),
+            metricOfHistogram(ignite0, metricName(mregName, "histogram"), boundsWithLowAndName));
 
         assertEquals("1", metric(ignite0, metricName(mregName, "histogram_with_underscore_0_50")));
         assertEquals("2", metric(ignite0, metricName(mregName, "histogram_with_underscore_50_500")));
         assertEquals("3", metric(ignite0, metricName(mregName, "histogram_with_underscore_500_inf")));
-        assertEquals("[1, 2, 3]", metric(ignite0, metricName(mregName, "histogram_with_underscore")));
+
+        assertEqualsCollectionsIgnoringOrder(F.asList("1", "2", "3", "[1, 2, 3]"),
+            metricOfHistogram(ignite0, metricName(mregName, "histogram_with_underscore"), boundsWithLowAndName));
     }
 
     /** */
@@ -448,10 +456,26 @@ public class MetricCommandTest extends GridCommandHandlerClusterByClassAbstractT
      */
     private String metric(IgniteEx node, String name) {
         Map<String, String> metrics = metrics(node, name);
-        
+
         assertEquals(1, metrics.size());
         
         return metrics.get(name);
+    }
+
+    /**
+     * Gets single metric value via command-line utility.
+     *
+     * @param node Node to obtain metric from.
+     * @param name Name of the metric.
+     * @param bounds Bounds of the histogram.
+     * @return Collection of Strings representation of metric value in buckets.
+     */
+    private Collection<String> metricOfHistogram(IgniteEx node, String name, long bounds) {
+        Map<String, String> metrics = metrics(node, name);
+
+        assertEquals(bounds, metrics.size());
+
+        return metrics.values();
     }
 
     /**
