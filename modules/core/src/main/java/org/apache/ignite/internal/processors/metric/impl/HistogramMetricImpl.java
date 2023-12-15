@@ -18,17 +18,11 @@
 package org.apache.ignite.internal.processors.metric.impl;
 
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLongArray;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.apache.ignite.internal.processors.metric.AbstractMetric;
 import org.apache.ignite.internal.processors.metric.ConfigurableHistogramMetric;
 import org.apache.ignite.internal.util.typedef.F;
 import org.jetbrains.annotations.Nullable;
-
-import static org.apache.ignite.internal.processors.metric.impl.MetricUtils.histogramBucketNames;
 
 /**
  * Histogram metric implementation.
@@ -57,26 +51,6 @@ public class HistogramMetricImpl extends AbstractMetric implements ConfigurableH
 
         holder = toCopy.holder;
     }
-
-    /**
-     * Get map with data of histogram for print.
-     *
-     * @return Map with data of histogram.
-     */
-    public Map<String, ?> getHistogramForPrint() {
-        String[] names = histogramBucketNames(this);
-
-        assert names.length == value().length;
-
-        Map<String, String> map = IntStream.range(0, names.length)
-            .boxed()
-            .collect(Collectors.toMap(i -> names[i], i -> String.valueOf(value()[i]), (a, b) -> a, LinkedHashMap::new));
-
-        map.put(name(), getAsString());
-
-       return map;
-    }
-
 
     /**
      * Sets value.
